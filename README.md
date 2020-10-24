@@ -8,4 +8,4 @@ Goal:
 
 
 Bugs:
-There are no bugs in the project.
+There are no known bugs in the project.
