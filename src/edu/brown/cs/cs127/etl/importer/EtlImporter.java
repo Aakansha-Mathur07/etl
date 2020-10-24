@@ -13,9 +13,7 @@ class normalize_data
 	{
 
 		DateFormat standardDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		DateFormat[] sampleDateFormats = {new SimpleDateFormat("MM-dd-yyyy"),
-									  	  new SimpleDateFormat("MM/dd/yyyy"),
-									  	  new SimpleDateFormat("yyyy/MM/dd")};
+		DateFormat[] sampleDateFormats = {new SimpleDateFormat("MM-dd-yyyy"),new SimpleDateFormat("MM/dd/yyyy"), new SimpleDateFormat("yyyy/MM/dd")};
 
 		String date = null;
 
