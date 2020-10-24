@@ -1,4 +1,4 @@
-# EXTRACT TRANSFORM LOAD
+# Extract Transform Load
 
 The project was a part of the CSCI 1270: Database Systems course at Brown University. 
 
