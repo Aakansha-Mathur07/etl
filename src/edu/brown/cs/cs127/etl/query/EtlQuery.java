@@ -1,11 +1,6 @@
 package edu.brown.cs.cs127.etl.query;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Date;
 import java.text.*;
 
@@ -37,10 +32,7 @@ public class EtlQuery
 
 	public ResultSet queryB(String[] args) throws SQLException
 	{
-		/**
-		 * For some sample JDBC code, check out
-		 * http://web.archive.org/web/20100814175321/http://www.zentus.com/sqlitejdbc/
-		 */
+
 		PreparedStatement stat = conn.prepareStatement(
 			"SELECT COUNT(airline_code) FROM airlines;"
 		);
@@ -49,10 +41,6 @@ public class EtlQuery
 
 		public ResultSet queryC(String[] args) throws SQLException
 	{
-		/**
-		 * For some sample JDBC code, check out
-		 * http://web.archive.org/web/20100814175321/http://www.zentus.com/sqlitejdbc/
-		 */
 		PreparedStatement stat = conn.prepareStatement(
 			"SELECT COUNT(flights_id) FROM flights;"
 		);
@@ -71,10 +59,6 @@ public class EtlQuery
 
 	public ResultSet query1(String[] args) throws SQLException
 	{
-		/**
-		 * For some sample JDBC code, check out
-		 * http://web.archive.org/web/20100814175321/http://www.zentus.com/sqlitejdbc/
-		 */
 		PreparedStatement stat = conn.prepareStatement(
 			"SELECT airline_name, MIN(flight_num) FROM flights,airlines WHERE airline_name = ? AND flights.airline_id = airlines.airline_id;"
 		);
@@ -84,10 +68,6 @@ public class EtlQuery
 
 	public ResultSet query2(String[] args) throws SQLException
 	{
-		/**
-		 * For some sample JDBC code, check out
-		 * http://web.archive.org/web/20100814175321/http://www.zentus.com/sqlitejdbc/
-		 */
 		PreparedStatement stat = conn.prepareStatement(
 			"SELECT COUNT(cancelled) FROM flights,airlines WHERE airline_name = ? AND flights.airline_id = airlines.airline_id AND cancelled=1;"
 		);
@@ -100,7 +80,6 @@ public class EtlQuery
 		PreparedStatement stat = conn.prepareStatement("SELECT airport_name, COUNT(flights_id) FROM airports, flights WHERE origin_airport_id = airport_id GROUP BY airport_name HAVING COUNT(flights_id) > 10000 ORDER BY COUNT(flights_id) DESC LIMIT 5;");
 		return stat.executeQuery();
 	}
-
 
 		public ResultSet query4(String[] args) throws SQLException
 	{
@@ -166,18 +145,6 @@ public class EtlQuery
 			+"WHERE airport_name = ?;"
 			);
 
-/*
-		PreparedStatement stat = conn.prepareStatement(
-			"SELECT A.airport_name, COUNT(F.dest_airport_id), COUNT(F.origin_airport_id)\n"
-			+"FROM flights F\n"
-			+"LEFT JOIN airports A1 ON A1.airport_id = F.origin_airport_id AND date(F.departure_dt)=? \n"
-			+"LEFT JOIN airports A2 ON A2.airport_id = F.dest_airport_id AND date(F.arrival_dt)=? \n"
-			+"NATURAL JOIN airports A\n"
-			+"WHERE A.airport_name = ?\n"
-			+"GROUP BY A.airport_id\n"
-			+"ORDER BY A.airport_name ASC;"
-			);
-*/
 		stat.setString(1, final_date);
 		stat.setString(2, final_date);
 		stat.setString(3, args[3]);
@@ -238,8 +205,8 @@ public class EtlQuery
 
 			PreparedStatement stat = conn.prepareStatement (
 				"SELECT A.airline_code, F3.flight_num, DA.airport_code as dest_code,\n"
-				+"strftime('%H:%M',time(F3.departure_dt), depart_diff || ' minute'), AA.airport_code,\n"
-				+"strftime('%H:%M', time(F3.arrival_dt), arrival_diff || ' minute'),\n"
+				+"strftime('%H:%M',time(F3.departure_dt), depart_diff || ' minutes'), AA.airport_code,\n"
+				+"strftime('%H:%M', time(F3.arrival_dt), arrival_diff || ' minutes'),\n"
 				+"((strftime('%H', strftime('%H:%M',time(F3.arrival_dt), arrival_diff || ' minute'))-strftime('%H', strftime('%H:%M',time(F3.departure_dt), depart_diff || ' minute')))*60) + (strftime('%M', strftime('%H:%M',time(F3.arrival_dt), arrival_diff || ' minute'))-strftime('%M', strftime('%H:%M',time(F3.departure_dt), depart_diff || ' minute'))) AS duration \n"
 				+"FROM airlines A\n"
 				+"JOIN flights F3 ON F3.airline_id = A.airline_id\n"
@@ -270,8 +237,8 @@ public class EtlQuery
 
 	PreparedStatement stat = conn.prepareStatement (
 			"WITH airlinesData AS (SELECT airline_code, flight_num, DA.airport_code as depart_code, DA.city AS depart_city, DA.state AS depart_state,\n"
-			+"strftime('%Y-%m-%d %H:%M',departure_dt, depart_diff || ' minute') AS depart_time, AA.airport_code AS arrive_code, AA.city AS arrive_city, AA.state AS arrive_state,\n"
-			+"strftime('%Y-%m-%d %H:%M', arrival_dt, arrival_diff || ' minute') AS arrive_time\n"
+			+"strftime('%Y-%m-%d %H:%M',departure_dt, depart_diff || ' minutes') AS depart_time, AA.airport_code AS arrive_code, AA.city AS arrive_city, AA.state AS arrive_state,\n"
+			+"strftime('%Y-%m-%d %H:%M', arrival_dt, arrival_diff || ' minutes') AS arrive_time\n"
 			+"FROM flights F3\n"
 			+"JOIN airlines A ON F3.airline_id = A.airline_id\n"
 			+"JOIN airports DA ON DA.airport_id = F3.origin_airport_id\n"
@@ -313,8 +280,8 @@ try{
 
 	PreparedStatement stat = conn.prepareStatement (
 			"WITH airlinesData AS (SELECT airline_code, flight_num, DA.airport_code as depart_code, DA.city AS depart_city, DA.state AS depart_state,\n"
-			+"strftime('%Y-%m-%d %H:%M',departure_dt, depart_diff || ' minute') AS depart_time, AA.airport_code AS arrive_code, AA.city AS arrive_city, AA.state AS arrive_state,\n"
-			+"strftime('%Y-%m-%d %H:%M', arrival_dt, arrival_diff || ' minute') AS arrive_time\n"
+			+"strftime('%Y-%m-%d %H:%M',departure_dt, depart_diff || ' minutes') AS depart_time, AA.airport_code AS arrive_code, AA.city AS arrive_city, AA.state AS arrive_state,\n"
+			+"strftime('%Y-%m-%d %H:%M', arrival_dt, arrival_diff || ' minutes') AS arrive_time\n"
 			+"FROM flights F3\n"
 			+"JOIN airlines A ON F3.airline_id = A.airline_id\n"
 			+"JOIN airports DA ON DA.airport_id = F3.origin_airport_id\n"
