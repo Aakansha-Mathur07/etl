@@ -315,19 +315,18 @@ stat.setString(6, args[3]);
 return stat.executeQuery();
 }
 
-	public String normalize_date_time(String dateString) throws Exception
+	public String normalize_date_time(String input_date) throws Exception
 	{
 
 		DateFormat standardDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat sampleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
-		Date dateParsed = new Date();
 		String date = null;
 
 		try {
 			sampleDateFormat.setLenient(false);
-			dateParsed = sampleDateFormat.parse(dateString);
-			date = standardDateFormat.format(dateParsed);
+			Date sample_date = sampleDateFormat.parse(input_date);
+			date = standardDateFormat.format(sample_date);
 		} catch (Exception e) {
 		}
 
